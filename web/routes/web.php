@@ -89,3 +89,7 @@ Route::get('/test/request', 'TestController@testRequest');
 Route::get('/test/session/put', 'TestController@storeSession');
 Route::get('/test/session/get', 'TestController@getSession');
 Route::get('/test/session/flush', 'TestController@flushSession');
+
+Route::get('/db/basic', 'DBController@basicQuery'); // DB 기본
+
+Route::get('/db/query', 'DBController@queryBulider'); // 쿼리 빌더

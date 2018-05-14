@@ -44,9 +44,9 @@ return [
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
 
-            'database' => env('DB_DATABASE', 'test'),
-            'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', 'fire0428'),
+            'database' => env('DB_DATABASE', 'abcd_db'),
+            'username' => env('DB_USERNAME', 'abcd'),
+            'password' => env('DB_PASSWORD', '1234'),
 
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
