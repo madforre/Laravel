@@ -22,7 +22,7 @@
             <tbody>
                 @foreach ($contents as $item)
                     <tr>
-                        <th scope="row">{{_$item->id}}</th>
+                        <th scope="row">{{ $item->id }}</th>
                         <td><a href="/view?pageid={{ $item->id }}">{{ $item->title }}</a></td>
                         <td>{{ $item->reg_user_name }}</td>
                         <td>{{ $item->created_at }}</td>
@@ -42,9 +42,14 @@
     <div class="col-md-3 text-right">
         @if (Session::has('login')) <!-- 세션이 있을때만 실행 -->
             <button type="button" id="addFormBtn" class="btn btn-default btn-primary">등록</button>
-        @else
+        @endif
     </div>
     <div class="col-md-1 btn-group text-right">
+        @if (Session::has('login'))
+        <button class="btn btn-default" id="logoutBtn" type="button">
+            로그아웃
+        </button>
+        @else
         <button class="btn btn-default" id="loginFormBtn" type="button">
             로그인
         </button>

@@ -93,3 +93,16 @@ Route::get('/test/session/flush', 'TestController@flushSession');
 Route::get('/db/basic', 'DBController@basicQuery'); // DB 기본
 
 Route::get('/db/query', 'DBController@queryBulider'); // 쿼리 빌더
+
+// Board
+
+Route::get('/login-form', 'BoardController@loginForm');
+Route::post('/login', 'BoardController@login');
+Route::get('/logout', 'BoardController@logout');
+Route::get('/add-form', 'BoardController@addForm');
+Route::post('/add', 'BoardController@add');
+Route::get('/edit-form', 'BoardController@editForm');
+Route::post('/edit', 'BoardController@edit');
+Route::get('/delete', 'BoardController@delete');
+Route::get('/list', 'BoardController@listView');
+Route::get('/view', 'BoardController@view');

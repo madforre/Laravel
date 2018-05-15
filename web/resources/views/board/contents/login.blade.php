@@ -4,7 +4,7 @@
 @stop
 @section('content')
     <div>
-        <form action="login" class="form-signin" method="post">
+        <form class="form-signin" action="login" method="post">
             <h2>ABCD 로그인</h2>
             <input type="email" name="email" class="form-control" placeholder="이메일" required autofocus>
             <input type="password" name="password" class="form-control" placeholder="비밀번호" required>

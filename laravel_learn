@@ -313,3 +313,16 @@ mysql 모니터에서 현재 Character-Set 확인하는 방법 2가지
 
     slideshare Laravel 로 배우는 서버사이드 #5 
     모델생성할차례임 27쪽!
+    
+-------------------
+
+Illuminate\Http\Request 인스턴스는 어플리케이션의 HTTP request를 검사할 수 있는 다양한 메소드를 제공합니다. 라라벨의 Illuminate\Http\Request는 Symfony\Component\HttpFoundation\Request 클래스를 상속합니다. 
+
+--------------------------
+
+라라벨에서 POST 전달에 사용되는 토큰은 Post form 에 히든으로 위치해야한다.
+없으면 서버전송시 에러가 발생한다.
+
+    <input type="hidden" name="_token" value="{{ csrf_token() }} ">
+    
+--------------------------

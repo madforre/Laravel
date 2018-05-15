@@ -23,9 +23,9 @@
        <div class="col-md-8"></div>
        <div class="col-md-3 text-right">
            <div class="btn-group" role="group">
-               @if (Session::has('login))
-                   <button type="button" id="editFormBtn" class="btn btn-default">수정</button>
-                   <button type="button" id="delBtn" class="btn btn-default">삭제</button>
+               @if (Session::has('login'))
+                   <button class="btn btn-default" type="button" id="editFormBtn">수정</button>
+                   <button class="btn btn-default" type="button" id="delBtn">삭제</button>
                 @endif
                 <button type="button" id="listBtn" class="btn btn-default">목록</button>
            </div>
@@ -45,7 +45,7 @@
     </div>
     <script>
         $(document).ready(function(){
-            $("editFormBtn").click(function(){
+            $("#editFormBtn").click(function(){
                 location.href = "/edit-form?pageid={{$pageid}}";
             });
             $("#delBtn").click(function(){

@@ -14,7 +14,7 @@
             <textarea name="contents" class="form-control" rows="5" required>{{$contents->contents}}</textarea>
         </div>
         <input type="hidden" name="pageid" value="{{ $pageid }}">
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}"> <!--토큰 필수-->
         <div class="vertical-align">
             <div class="col-md-11 text-right">
                 <button class="btn btn-primary" type="submit">수정</button>
