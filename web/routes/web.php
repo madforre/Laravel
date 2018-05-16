@@ -12,12 +12,17 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome'); // 익명함수, Closure에서 반환된 값이 Http 응답으로 전달된다.
 });
 
 Route::get('/hello', function () {
-    return "hello world";
+    return "hello world"; // view(''); 가 아니라 스트링을 반환하면 브라우저에 스트링이 출력된다.
 });
+
+//Route::get('/', function(){
+//    return view('errors.503'); // resources/views/errors/503.blade.php와 같이 
+//                               // 하위 뷰를 응답하려면 하위 디렉토리 구분자인 '.' 또는 '/' 으로 구분한다.
+//});
 
 Route::get('/welcome/{id}', 'WelcomeController@showHello');
           // 라라벨에서 @는 컨트롤러클래스 내 메소드 접근자이다.
@@ -106,3 +111,39 @@ Route::post('/edit', 'BoardController@edit');
 Route::get('/delete', 'BoardController@delete');
 Route::get('/list', 'BoardController@listView');
 Route::get('/view', 'BoardController@view');
+
+// with 메쏘드로 뷰에 데이터 바인딩하는 방법
+
+Route::get('/bind', function(){
+    $greeting = 'Hello';
+    
+    return view('index')->with('greeting', $greeting);
+});
+
+// with 메쏘드로 한 개 이상의 데이터를 넘기는 방법
+
+Route::get('/bind1', function (){
+    return view('index')->with([
+        'greeting' => 'Good morning ^^/',
+        'name'     => '한글'
+    ]);
+});
+
+// view()의 2번째 인자로 데이터를 넘기는 방법
+
+Route::get('/bind2', function () {
+    return view('index', [
+        'greeting' => 'Ola~',
+        'name'     => 'Laravelians 한글'
+    ]);
+});
+
+// view 인스턴스의 Property를 이용하는 방법
+
+Route::get('/bind3', function () {
+    $view = view('index');
+    $view->greeting = "Hey~ What's up";
+    $view->name = 'everyone 모두들! ';
+    
+    return $view;
+});
