@@ -23,3 +23,10 @@ Route::get('/hi', 'IndexController@hou');
 Route::get('/sub', function () {
     return view('sub');
 });
+
+// Route에 이름 주기
+Route::get('posts', [
+    'as' => 'posts.index', 
+    'uses' => 'PostsController@index'
+]);
+
