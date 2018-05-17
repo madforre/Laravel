@@ -147,3 +147,4 @@ Route::get('/bind3', function () {
     
     return $view;
 });
+
