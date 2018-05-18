@@ -16,7 +16,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name', 'email', 'password',
-    ];
+    ]; //$fillable 속성을 통해 MassAssign이 가능하다는 것을 알 수 있음.(대량할당?)
 
     /**
      * The attributes that should be hidden for arrays.
@@ -25,5 +25,5 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password', 'remember_token',
-    ];
+    ]; // 외부에 노출되지 않는 필드들을 정의한 것이다.
 }

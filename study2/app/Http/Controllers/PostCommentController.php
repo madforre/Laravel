@@ -4,16 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class PostsController extends Controller
+class PostCommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($postId)
     {
-        return '[' . __METHOD__ . '] ' . 'respond the index page';
+        // GET http://localhost/posts/1/comments
+        return '[' . __METHOD__ . "] \$postId = {$postId}";
+        // [App\Http\Controllers\PostCommentController::index] $postId = 1
     }
 
     /**
@@ -23,8 +25,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return '[' . __METHOD__ . '] ' . 'respond a create form';
-
+        //
     }
 
     /**
@@ -34,10 +35,8 @@ class PostsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   // 토큰의 유효성을 확인하고, 같은 세션일 경우 store() 액션을 수행
-        // create()를 요청한 클라이언트와 
-        // store()를 요청한 클라이언트가 동일할 경우에만.
-        return '[' . __METHOD__ . '] ' . 'validate the form data from the create form and create a new instance';
+    {
+        //
     }
 
     /**
@@ -46,10 +45,11 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($postId, $commentId)
     {
-        return '[' . __METHOD__ . '] ' . 'respond an instance having id of ' . $id;
-
+         // GET http://localhost:80/posts/1/comments/20
+        return $postId . '-' . $commentId;
+        // [App\Http\Controllers\PostCommentController::show] $postId = 1, $commentId = 20
     }
 
     /**
@@ -60,8 +60,7 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        return '[' . __METHOD__ . '] ' . 'respond an edit form for id of ' . $id;
-
+        //
     }
 
     /**
@@ -73,7 +72,7 @@ class PostsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return '[' . __METHOD__ . '] ' . 'validate the form data from the edit form and update the resource having id of ' . $id;
+        //
     }
 
     /**
@@ -84,6 +83,6 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        return '[' . __METHOD__ . '] ' . 'delete resource ' . $id;
+        //
     }
 }
