@@ -1,4 +1,5 @@
-﻿라라벨
+﻿
+라라벨
 
 친절한 설명 , but not detail
 
@@ -352,6 +353,8 @@ view는 Helper Function이다. return View::make('welcome')과 같이 라라벨�
 의해 설정된 DB Driver와 ORM 사용으로 인해 데이터베이스와 어플리케이션 간에 디커플링 효과(탈 동조화)도 얻게 된다.
 어플리케이션 코드 수정 한 줄 없이 mySQL을 SQLite로 바꿀 수 있다는 의미이다.
 
+엘로퀀트 ORM의 꽃은 모델간의 관계 맺기
+
 ------------------------------
 
 참고 사항
@@ -480,3 +483,183 @@ http://haah.kr/2017/06/12/rest-the-big-lie/
 
 -------------------------------------
 
+AppServiceProvider.php 파일에 (DB마이그레이션 할 때)
+
+use Illuminate\Support\Facades\Schema; // 이게 있어야 마이그레이션 가능
+
+
+또한 MariaDB 또는 이전 버전의 MySQL 사용자는
+
+AppServiceProvider.php 파일을 편집하고 수정해줘야 한다.
+
+use Illuminate\Support\Facades\Schema;
+
+public function boot()
+{
+    Schema::defaultStringLength(191);
+}
+
+https://laravel-news.com/laravel-5-4-key-too-long-error
+
+------------------------------
+
+로그인 뷰에서 소스보기를 해 보자. <input type="hidden" name="_token" value="jPR...nO2"> 란 라인을 볼 수 있다. 
+바로 csrf_field() Helper Function이 CSRF 공격을 막기 위해 만든 토큰을 담은 숨은 입력 폼이다. 
+13강에서 공부한 내용이다. {!! !!}은 '<', '>' 같은 특수문자의 '<', '>' Escaping 되는 것을 막기 위한 블레이드의 Interpolation 문법이다.
+
+----------------------
+
+라라벨에서 기본 제공하는 인증에서 패스워드는 최소 6자리 이상이어야 한다. 
+App\Http\Controllers\Auth\RegisterController@validator 메소드를 보면 'password' => 'required|confirmed|min:6' 라고 
+유효성 검사 규칙이 지정되어 있는 것을 확인할 수 있다. 유효성 검사, 뷰에 쓰인 old() 함수에 대해서는 뒤에서 다시 살펴보도록 하자.
+
+--------------------
+
+외래키 연결이 있는 관계에서 컬럼을 삭제할 수 없다.
+
+migration 메소드 
+
+	up 은 버젼 업데이트
+	down 은 롤백에 사용
+
+----------------
+
+데이터 심기
+
+앞에서 마이그레이션으로 테이블을 만들어 보았다. 만
+들어진 테이블에 테스트 데이터 또는 기본 데이터를 심는 과정을 씨딩(Seeding)이라 한다. 
+라라벨 5부터 Seeding을 효율적으로 하기 위한 Factory 기능이 제공된다. 
+Factory는 데이터베이스 Seeding 뿐만 아니라, 테스트 클래스에서 필요한 데이터를 Stubbing하는데도 유용하게 사용할 수 있다.
+
+factory() Helper 에서 호출한 make() 메소드는 메모리에 모델 인스턴스만 생성하는 반면, 곧 보게 될 create() 메소드는 모델 인스턴스를 생성하고 DB에 저장하는 일까지 한다.
+
+factory() Helper Function을 이용해서 Seeder 클래스를 채우자. truncate() 메소드는 모델과 연결된 테이블 데이터를 깨끗이 지워주는 역할을 해 준다.
+
+ex) // database/seeds/UsersTableSeeder
+class UsersTableSeeder extends Seeder 
+{
+    public function run() 
+    {
+        App\User::truncate();
+        factory('App\User', 10)->create();
+    }
+}
+
+Seeder 클래스가 완성되었으면 마스터 Seeder 클래스인, database/seeds/DatabaseSeeder.php 에 등록하자. 
+Model::ungard()는 모든 모델에 대해 MassAssignment를 허용한다는 의미이다.
+
+-------------------
+
+기본적으로 블레이드 {{ }} 문장은 XSS 공격을 방지하기 위해 PHP의 htmlspecialchars 함수를 통과합니다. 데이터를 escape 처리를 하지 않으려면 다음과 같이 작성하면 됩니다:
+
+Hello, {!! $name !!}.
+
+어플리케이션의 사용자들로 부터 입력하여 표시되는 컨텐츠를 출력할 때는 
+escape-이스케이프에 대한 주의가 필요합니다. 
+사용자가 제공한 데이터를 표시 할 때 XSS 공격을 방지하려면 항상 이스케이프 처리 된 이중 중괄호 문법을 사용하십시오.
+
+------------------
+
+eager loading
+eager 로딩, 이거 로딩, 사전예약 로딩, 사전 로딩, 선행 로딩, 즉시 로딩
+로딩시 참조해야 하는 정보를 미리 명시하는 일
+N+1 쿼리 문제의 해결을 통해 성능 향상
+ORM 활용시 흔히 발생할 수 있는 N+1 문제 해결 가능
+게으른 로딩의 반대개념
+
+Eager 로딩. 쿼리 갯수를 N+1에서 2개로 줄인다.
+ORM 활용시 흔히 발생할 수 있는 N+1 문제 해결 가능
+
+with(string|array $relations) 메소드는 항상 엘로퀀트 모델 바로 뒤, 다른 메소드를 체인하기 전에 써야 한다. 
+메소드의 인자는 테이블 이름이 아니라, 모델 클래스에서 정의한 관계를 나타내는 메소드 이름임을 잘 기억하자.
+
+ex)  Eager 로딩
+Route::get('posts', function() {
+    $posts = App\Post::with('user')->get();
+
+    return view('posts.index', compact('posts'));
+});
+
+user 정보가 없어서 건수만큼 쿼리 추가 수행 (1+N회)
+user 정보를 사용하겠다고 미리 알려줌으로써 쿼리 최소화 (2회)
+
+Lazy Eager 로딩
+
+가끔 엘로퀀트를 이용한 쿼리를 먼저 만들어 놓고, 나중에 관계를 로드해야 하는 경우가 발생할 수 있다. 
+이때는 load(string|array $relations) 메소드를 이용할 수 있다.
+(예를 들면, 쿼리 하나를 여러 번 재사용할 경우, 앞에서는 Eager 로딩이 필요없었지만, 나중에 필요하게 되는 경우 등이 해당된다. )
+
+ex) 
+Route::get('posts', function() {
+    $posts = App\Post::get();
+    $posts->load('user');
+
+    return view('posts.index', compact('posts'));
+});
+
+-----------------------------
+
+페이징
+
+모델에 데이터가 많아지면 한번에 모든 레코드를 표시할 수가 없게 된다. 이때 필요한 것이 페이징이다.
+
+app/Http/routes.php 에 아래와 같이 Route를 써 보자. 
+모델에 대한 쿼리 끝에 get() 이나 find() 대신, paginate() 메소드를 체인하면 페이징을 위한 준비 완료! 
+인자는 한번에 반환할 Collection 갯수를 넣는다. 이 예제에서는 10개로 했다.
+
+Route::get('posts', function() {
+    $posts = App\Post::with('user')->paginate(10);
+
+    return view('posts.index', compact('posts'));
+});
+
+라라벨 페이징은 twitter bootstrap과 완벽하게 호환된다. 확인을 위해 resources/views/master.blade.php 에 bootstrap 사용을 선언하자.
+
+20강에서 사용하던 resources/views/posts/index.blade.php 를 그대로 사용하자. 
+@stop 바로 전에 아래 코드를 추가하자. paginate() 메소드를 체임함으로써, 
+$posts 객체는 페이징이 가능한 Paginator 인스턴스로 변경되었고 render() 메소드를 쓸 수 있게 된 것이다. 
+렌더링된 뷰에서 소스보기를 해서 어떤 코드가 추가되었는 지 확인해 보자.
+
+@if($posts)
+    <div class="text-center">
+      {!! $posts->render() !!}
+    </div>
+  @endif
+@stop
+
+이 코드를 추가하고, 브라우저 소스보기와 비교해본다.
+(직접 짜면 몹시 복잡한 페이지네이션 코드를 간단한 코드로 생성하였다.)
+
+---------------
+
+메일보내기
+
+메일건 회원가입
+
+.env 에서 MAIL로 시작하는 설정 전부 지우기
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+
+메일을 보내 보자.
+app/Http/routes.php 에 메일을 보내는 Route를 작성하자. 노파심에 다시 얘기하면, 학습을 위해 편의상 routes.php 에 작성하지만, 실전에서는 컨트롤러 (또는 서비스 로직)에 들어가야 하는 내용이다.
+
+Route::get('mail', function() {
+    $to = 'YOUR@EMAIL.ADDRESS';
+    $subject = 'Studying sending email in Laravel';
+    $data = [
+        'title' => 'Hi there',
+        'body'  => 'This is the body of an email message',
+        'user'  => App\User::find(1)
+    ];
+
+    return Mail::send('emails.welcome', $data, function($message) use($to, $subject) {
+        $message->to($to)->subject($subject);
+    });
+});
+send() 메소는 3개의 인자를 받는다. 첫번째는 사용할 뷰, 두번 째는 뷰에서 바인딩 시킬 데이터, 세번째는 콜백이다.
+
+참고 send() 대신 queue() 메소드를 사용하는 것이 편리하다. Queue 설정이 되어 있지 않으면, send()로 자동 폴백된다.
