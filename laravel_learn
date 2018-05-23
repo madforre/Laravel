@@ -11,6 +11,23 @@ https://tutorials.kode-blog.com/laravel-hello-world
 
 https://laravel.kr/docs/5.6/installation
 
+---------------------------
+
+프레임워크란?
+
+
+1. 프레임워크(Framework)
+
+	프레임워크는 어떠한 목적을 달성하기 위해 복잡하게 얽혀있는 문제를 해결하기 위한 구조이며, 소프트웨어 개발에 있어 하나의 뼈대를 한다.
+
+2. 라이브러리와의 차이점
+
+	보통 프레임워크라고 하면 클래스와 라이브러리가 합쳐진 형태라고 볼 수 있다.
+
+	메소드 및 클래스화, 즉 모듈화를 하는 이유 중 하나가 재사용성인데, 
+    프레임워크는 이 재사용성을 큰 그룹 단위로 묶어주었다고 보면 된다. 
+    재사용 가능한 수많은 클래스들과 라이브러리들을 융합한채로 처음부터 제공해 주기 때문에, 여러 개의 표준을 만들지 않아도 돼서 개발자들의 피곤함을 덜어준다.
+
 ----------------------------------------
 
 Public 디렉토리
@@ -663,3 +680,153 @@ Route::get('mail', function() {
 send() 메소는 3개의 인자를 받는다. 첫번째는 사용할 뷰, 두번 째는 뷰에서 바인딩 시킬 데이터, 세번째는 콜백이다.
 
 참고 send() 대신 queue() 메소드를 사용하는 것이 편리하다. Queue 설정이 되어 있지 않으면, send()로 자동 폴백된다.
+
+---------------------------
+
+라라벨 이벤트 시스템은 Observer 또는 PubSub 패턴을 구현할 수 있게 해 준다.
+
+이벤트 방식 구조체의 잇점 몇가지는 아래와 같다.
+
+1. 사용자에게 빠른 응답을 제공할 수 있다. (Non blocking I/O)
+2. 리스너를 여러개 구현하면, 이벤트 하나로 여러가지 작업을 동시에 수행할 수 있다.
+
+이벤트는 주로 IO 가 수반되는 경우에 많이 사용된다. smtp 로 이메일을 보낸다든가, HTTP 클라이언트로 외부 서비스로 부터 데이터를 가져온다든가, 파일 시스템으로부터 큰 파일을 읽을 때 등이 대표적인 예이다.
+
+-----------------------------
+
+입력 값 유효성 검사
+
+항상 듣는 말이다. "사용자가 입력한 값은 절대 신뢰하지 마라." 
+유효성 검사는 사용자의 악의적인 해킹 시도 또는 잘못된 데이터 입력으로 부터 
+서비스를 보호하는 기본 중에 기본이므로 굉장히 중요하다. 
+
+프론트엔드에서 자바스크립트로 한번 걸렀다고 해도, HTTP 클라이언트를 통해서 직접 요청할 수 있으므로 백엔드에서도 반드시 유효성 검사를 수행해야 한다.
+
+라라벨이 지원하는 유효성 검사 규칙
+required, min 뿐 아니라, string, confirmed, exists, required_if, 
+등등등 굉장히 많다. 공식 문서를 참고하자.
+
+https://laravel.com/docs/5.6/validation#available-validation-rules
+
+$errors 변수는 모든 뷰에서 항상 존재하기 때문에 if (isset($errors)) 등과 같은 방어 조치를 할 필요가 없다는 것을 기억해 두자. $errors는 withErrors()에 의해 세션에 구워진 값이다.
+
+***Form Request를 이용하는 방법이 가장 깔끔하긴 하다. 공식 문서를 참고하자.
+
+--------------------------------------
+
+예외 던지기
+
+라라벨에서 예외(Exception)는 컨트롤러 또는 서비스 로직을 수행하는 도중 
+어디서든 던질 수 있다. 
+app/Http/routes.php를 이용하여 예외를 던지는 방법은 실습해 보자.
+
+ex)
+
+Route::get('/', function() {
+    throw new Exception('Some bad thing happened');
+});
+
+Production 환경에서는 보안을 위해 Stack Trace가 모두 찍히는 DEBUG 옵션을 꺼야 한다. .env 파일에서 APP_ENV=production, APP_DEBUG=false로 바꾼 후 '/' Route를 다시 방문해 보자. 웹 서버를 재시작해야 변경 내용을 확인할 수 있다.
+
+또 다른 방법은 abort(404) 처럼, abort(int $code, string $message) Helper Function을 이용하는 방법이다. abort()는 HttpException 을 던진다.
+
+------------------------------------------
+
+예외를 캐치하자.
+
+라라벨에서는 try{} catch($e){} 로 감싸지 않아도, 글로벌 하게 예외를 잡아준다. 
+바로 app/Exceptions/Handler.php 가 주인공이다. 클래스를 살펴보자.
+
+class Handler extends ExceptionHandler
+{
+    protected $dontReport = [];
+
+    public function report(Exception $e) {}
+
+    public function render($request, Exception $e) {}
+}
+
+$dontReport 속성에는 report() 메소드를 타지 않을 예외 클래스들의 리스트를 정의한다.
+
+report() 메소드는 기본적으로 로그 (storage/logs/laravel.log)에 예외의 내용을 쓴다. 여기서 관리자 이메일, 슬랙, BugSnag와 같은 외부 서비스에 예외 내용 등을 리포트하는 로직을 더 구현해 넣을 수 있다.
+
+render() 메소드에서는 예외를 Http 응답으로 렌더링하는 로직들을 포함한다.
+
+--------------------------------------------
+
+예외를 처리하자.
+
+app/Exceptions/Handler.php의 render() 메소드에 처리 내용을 추가해 보자. 
+
+아래는 ModelNotFoundException 이 발생하면 지정된 뷰를 내용으로 하는 
+HTTP 404 응답을 반환하라는 의미이다.
+
+ex)
+
+class Handler extends ExceptionHandler
+{
+
+public function render($request, Exception $exception)
+    {
+        // 예외를 처리하자.
+        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+            return response(view('errors.notice', [
+                'title'       => 'Page Not Found',
+                'description' => 'Sorry, the page or resource you are trying to view does not exist.'
+            ]), 404);
+        }
+        return parent::render($request, $exception);
+    }
+}
+
+---------------------------------
+
+컴포저
+
+Composer는 php의 패키지 매니저이다. 패키지 레지스트리는 패키지스트라 불린다. 
+Java에 Maven, Python에 PyPi, Ruby에 Gem, Node에 Npm이 있다면, php엔 Composer가 있다. 라라벨도 버전 4로 넘어가면서 Composer를 본격적을 도입하고, 
+코어 프레임웍과 외부 패키지로 분리했다.
+
+작은 서비스를 개발할 때는 패키지를 관리하는 일이 필요없지만, 서비스가 커질 수록 패키지 관리의 필요성은 급증한다. 급기야 패키지를 관리하지 않아서, 개발자들이 패키지에 의해서 관리 당해지는 웃지 못할 사태가 벌어질 수 있다. 패키지 매니저를 쓸 때 개인적으로 좋은 점을 정리해 봤다.
+
+기억력을 보조한다 (레지스트리 역할).
+이미 만들어진 바퀴를 쉽게 가져다 쓰고, 모양을 약간 바꾸어 쓸 수도 있다 (Code Reuse).
+외부 패키지들은 버전 관리에서 빠지기 때문에 코드 풋프린트가 줄어들고 Git에 푸시 할 때 빠르다.
+외부 패키지들의 업데이트를 자동화할 수 있다. 즉, 일일이 확인하고, 다운로드하고, 설치해 줄 필요 없다.
+
+
+패키치 설치법
+
+    cmd 창에
+    composer require "설치할 패키지(검색해서 알아서 찾기)"
+
+    p.s - 프로젝트 디렉토리에 위치한 composer.json 파일을 열고, require 섹션에 필요한 패키지를 직접 추가해 준 후, $ composer update 코맨드를 실행하는 방법으로도 설치할 수 있다.
+
+어디에 어떤 패키지가 있는 지 어떻게 알아요?
+
+    유용성, 인기도, 완성도 측면에서 검증되어 큐레이션된 패키지 들이 있는 곳을 소개한다. 필요한 기능이 있다면 직접 만들려 하지 말고, 이 목록을 탐색하고 구글링해 보자.
+
+        ziadoz/awesome-php
+        chiraggude/awesome-laravel
+        TimothyDJones/awesome-laravel
+
+---------------------------------
+
+Document 모델
+
+File vs Storage
+
+    라라벨에서 File과 Storage 2개의 Facade가 있다. 공식문서에서 File이 빠진 것으로 보아 Storage의 사용을 권장하는 것처럼 보인다. 두 Facade의 API(== public 메소드)는 거의 동일하지만, Storage는 파일 저장위치를 config/filesystems.php 에 지정해 놓으면 그 디렉토리 밖을 벗어날 수 없다. 우리의 docs 폴더는 프로젝트 루트에 위치하므로, File Facade를 이용해야 한다.
+
+참고 
+
+    put(string $path, string $contents) 파일 쓰기, files(string $directory) 파일 목록 가져오기, glob(string $pattern) 패턴에 맞는 파일 목록 가져오기, isDirectory(string $directory) 디렉토리 체크, makeDirectory(string $path, int $mode) 디렉토리 만들기 등은 실전에서 자주 사용하게 되니 사용법을 익혀 두자.
+
+Document 모델을 만들자.
+
+    $ php artisan make:model Document
+
+    Document 모델은 엘로퀀트를 상속하지 않는다. 잘 생각해 보면, 컨트롤러의 기본 동작인 CRUD(Create, Read, Update, Delete) 중 Read만, 즉, 컨트롤러에서 요청한 이름에 해당하는 파일을 잘 읽어서 반환해 주는 메소드 하나만 필요하다.
+    
+    
+*** 예외 처리 하는 곳  >> app/Exceptions/Handler.php << 

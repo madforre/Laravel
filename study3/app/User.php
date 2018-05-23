@@ -39,6 +39,8 @@ class User extends Authenticatable
         return $this->hasMany('App\Post'); 
         // 여러 개의 app\post를 가질 수 있다는 뜻
     }
+    
+    protected $dates = ['last_login'];
 };
 
 // class User extends Model
