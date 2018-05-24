@@ -9,3 +9,50 @@ https://www.slideshare.net/ssuser800974/laravel-69640926
 견고한 웹 서비스를 하기 위한 실용적인 보안 가이드
 
 https://github.com/lesstif/web-service-hardening
+
+내가 라라벨을 사용하려는 이유?
+	
+	-> 이미 정리되어 있는 표준 클래스와 라이브러리를 사용하여 개발자의 수고를 덜어준다.
+	-> Modern PHP를 사용하며 생산성이 좋다.
+	-> 웹 보안 때문이다. 따로 시큐어 코딩할 필요 없이 라라벨 웹 프레임워크 자체가 가지고 있는
+	   보안 기능들을 사용한다.
+
+		 Laravel은 일반적인 웹에서의 공격 경로를 제거함으로써 훨씬 더 안전한 애플리케이션을 보장합니다.
+
+
+구성해야할 웹 보안내용들
+
+	XSS (Cross Side Scripting) - 라라벨에서 view 단에 HTML을 전달할 때 {{}} 같은 라라벨 블레이드 탬플릿을 사용하여 해결
+			          - 사용자가 입력한 정보가 화면에 출력될 때 공격을 방지하기 위함 
+					(이미 입력되있는 정보 출력시 자바스크립트 공격 방지)
+				    
+
+	CSRF(Cross-site request forgery) - 사이트 간 요청 위조(ex 폼전송) -> 라라벨 CSRF 토큰으로 해결
+
+	DDOS -> 라라벨에서  API Rate Limit
+		API 엔드포인트의 사용량을 제한 -> DDoS 공격으로 부터 서비스를 보호
+
+	SQLInjection - 데이터베이스에 데이터를 입력할 때 공격자가 sql문을 변조해서 공격하는 것을 막기 위함 
+			(라라벨 PDO방식 Laravel의 Eloquent ORM은 PDO 매개 변수 바인딩을 사용하여 SQL 주입을 방지)
+
+
+API Rate Limit
+
+	Why?
+	API 엔드포인트의 사용량을 제한하는 이유는 여러가지이다.
+
+	DDoS 공격으로 부터 서비스를 보호한다.
+
+	API 클라이언트 간에 API Resource 의 사용에 공평성을 제공한다. 
+	가령, 소수의 Heavy 클라이언트로 인해 다른 선량한 클라이언트가 피해를 입지 않도록 말이다.
+	API를 통해 받는 데이터 자체가 돈과 직결되는 경우, 그 Business Model 로서의 역할을 한다.
+
+
+# XSS와 CSRF의 차이요약
+
+- 간단하게, XSS는 공격대상이 Client이고, CSRF는 Server이다.
+
+- XSS는 사이트변조나 백도어를 통해 클라이언트에 대한 악성공격을 한다.
+
+- CSRF는 요청을 위조하여 사용자의 권한을 이용해 서버에 대한 악성공격을 한다.
+

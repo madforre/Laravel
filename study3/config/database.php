@@ -113,6 +113,7 @@ return [
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
             'database' => 0,
+            'read_write_timeout' => 60 // 추가적인 커넥션 파라미터 지원
         ],
 
     ],

@@ -21,6 +21,8 @@ Route::get('/throw', function() {
 });
 
 // ModelNotFoundException 발생
+// 기본적으로 findOrFail으로 Eloquent 모델을 라라벨에서 사용할 때
+// 실패하면 다음 오류가 반환됩니다.
 Route::get('/', function() {
     return App\Post::findOrFail(100);
 });
@@ -173,11 +175,21 @@ Route::resource('posts', 'PostsController');
 
 // 여기서 file을 'Route 파라미터' 라고 한다. 올드스쿨식으로 표현하자면 docs?file= 과 같다고 보면 된다.
 // 파라미터는 중괄호로 감싼다.
-Route::get('docu/{file?}', function($file = null) {
-    $text = (new \App\Document)->get($file);
-    // 파라미터로 받은 $file을 바로 뒤 콜백에 인자로 넘긴 것이 보일 것이다. 
-    // 물음표는 file 파라미터가 있을 수도 있고 없을 수도 있다는 의미이다. 
-    // 즉, docs, docs/any-text 를 모두 이 Route에서 처리한다는 의미이다.    
-    return app(ParsedownExtra::class)->text($text);
-});
 
+//Route::get('docu/{file?}', function($file = null) {
+//    $text = (new \App\Document)->get($file);
+//    // 파라미터로 받은 $file을 바로 뒤 콜백에 인자로 넘긴 것이 보일 것이다. 
+//    // 물음표는 file 파라미터가 있을 수도 있고 없을 수도 있다는 의미이다. 
+//    // 즉, docs, docs/any-text 를 모두 이 Route에서 처리한다는 의미이다.    
+//    
+//    // 마크다운 컴파일러를 불러온다.
+//    return app(ParsedownExtra::class)->text($text);
+//    
+//});
+
+// Document 컨트롤러 테스트
+
+Route::get('docu/{file?}', [
+    'as'   => 'documents.show',
+    'uses' => 'DocumentsController@show'
+]);

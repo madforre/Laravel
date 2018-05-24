@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -49,22 +50,13 @@ class Handler extends ExceptionHandler
         // 예외를 처리하자.
         // ModelNotFoundException이 발생하면
         // 지정된 뷰를 내용으로 하는 HTTP 404 응답을 반환하라는 의미이다.
-        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException or $exception instanceof \Illuminate\Database\Eloquent\NotFoundHttpException) {
+        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException or $exception instanceof NotFoundHttpException) {
             return response()->view('errors.notice', [
                 'title'       => 'Page Not Found',
                 'description' => 'Sorry, the page or resource you are trying to view does not exist.'
             ], 404);
         }
         return parent::render($request, $exception);
+        // 주어진 예외를 HTTP 응답으로 변환하고 브라우저에게 보내는 역할
     }
 }
-
-https://scotch.io/tutorials/creating-a-laravel-404-page-using-custom-exception-handlers
-
-https://hdtuto.com/article/laravel-55-create-custom-404-error-page
-
-https://medium.com/@johann.pardanaud/create-a-default-error-page-with-laravel-ac2b0596290b
-
-http://l5.appkr.kr/lessons/26-document-model.html#%EB%8F%99%EC%9E%91-%ED%85%8C%EC%8A%A4%ED%8A%B8
-create a custom 404 / error page in laravel
-예외처리에서 막혔음 404 custom이 안뜬다!!!!!!!!!!!
