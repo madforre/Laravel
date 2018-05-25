@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password' , 'status', 'activation_code', // 기본설정은 네임, 이메일, 패스워드였음
     ];
 
     /**

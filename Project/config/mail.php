@@ -121,3 +121,17 @@ return [
     ],
 
 ];
+
+return array(
+    "driver" => "smtp",
+    "host" => "smtp.mailtrap.io",
+    "port" => 2525,
+    "from" => array(
+        "address" => "from@example.com",
+        "name" => "Example"
+    ),
+    "username" => "91aae3e35b92d8",
+    "password" => "a7b573c83741d2",
+    "sendmail" => "/usr/sbin/sendmail -bs",
+    "pretend" => false
+  );

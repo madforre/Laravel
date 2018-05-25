@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Notifications\UserRegisteredSuccessfully; // added
 use App\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request; // added
+// use Illuminate\Support\Facades\Hash; // base
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -46,27 +48,73 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+
+    protected function register(Request $request)
     {
-        return Validator::make($data, [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+        /** @var User $user */
+        $validatedData = $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
+        try {
+            $validatedData['password']        = bcrypt(array_get($validatedData, 'password'));
+            $validatedData['activation_code'] = str_random(30).time();
+            $user                             = app(User::class)->create($validatedData);
+        } catch (\Exception $exception) {
+            logger()->error($exception);
+            return redirect()->back()->with('message', 'Unable to create new user.');
+        }
+        $user->notify(new UserRegisteredSuccessfully($user));
+        return redirect()->back()->with('message', 'Successfully created a new account. Please check your email and activate your account.');
     }
-
     /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
+     * Activate the user with given activation code.
+     * @param string $activationCode
+     * @return string
      */
-    protected function create(array $data)
+    public function activateUser(string $activationCode)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        try {
+            $user = app(User::class)->where('activation_code', $activationCode)->first();
+            if (!$user) {
+                return "The code does not exist for any user in our system.";
+            }
+            $user->status          = 1;
+            $user->activation_code = null;
+            $user->save();
+            auth()->login($user);
+        } catch (\Exception $exception) {
+            logger()->error($exception);
+            return "Whoops! something went wrong.";
+        }
+        return redirect()->to('/home');
     }
 }
+
+
+// make:auth 생성 시 클래스 안의 기본 내장 코드였음
+//     protected function validator(array $data)
+//     {
+//         return Validator::make($data, [
+//             'name' => 'required|string|max:255',
+//             'email' => 'required|string|email|max:255|unique:users',
+//             'password' => 'required|string|min:6|confirmed',
+//         ]);
+//     }
+
+//     /**
+//      * Create a new user instance after a valid registration.
+//      *
+//      * @param  array  $data
+//      * @return \App\User
+//      */
+//     protected function create(array $data)
+//     {
+//         return User::create([
+//             'name' => $data['name'],
+//             'email' => $data['email'],
+//             'password' => Hash::make($data['password']),
+//         ]);
+//     }
+// }

@@ -103,3 +103,13 @@ https://templatebench.com 최신정보 확인
 클래스와 네임 스페이스에 관한 가장 쉽고 가장 깔끔한 설명
 
 https://www.haruair.com/blog/2843#comment-4149
+
+-------------------------
+
+로그인 최신버젼
+
+https://medium.com/@sadhakbj/laravel-5-5-activate-account-after-registration-using-laravel-notification-fd5dc7fa05ad
+
+이걸 따라가라...
+
+------------------------
