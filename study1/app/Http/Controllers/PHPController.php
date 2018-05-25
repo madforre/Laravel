@@ -98,7 +98,7 @@ class PHPController extends Controller
     public function testLoop(){
         for ($i =1; $i <10; $i++){
           echo $i;
-        }
+        };
 
         echo "<br/>";
         $array = array(
@@ -118,8 +118,5 @@ class PHPController extends Controller
           ?
           */
           echo $item;
-        }
     }
-
-    //
 }

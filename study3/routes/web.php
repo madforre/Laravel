@@ -189,6 +189,24 @@ Route::resource('posts', 'PostsController');
 
 // Document 컨트롤러 테스트
 
+
+
+Route::pattern('image', '(?P<parent>[0-9]{2}-[\pL-\pN\._-]+)-(?P<suffix>img-[0-9]{2}.png)');
+
+               // 대괄호 안에 있는 패턴의 일부를 캐릭터 클래스 라고 한다. 캐릭터 클래스에서 사용할 수 있는 메타 문자는
+                // 다음과 같다.
+// \	일반 이스케이프 문자
+// ^	캐릭터 클래스를 반전(단, 첫 번째 문자로 입력될 때)
+// -	문자 범위
+// ]	캐릭터 클래스를 종료
+                
+               
+               
+Route::get('docu/{image}', [
+    'as'   => 'documents.image',
+    'uses' => 'DocumentsController@image'
+]);
+
 Route::get('docu/{file?}', [
     'as'   => 'documents.show',
     'uses' => 'DocumentsController@show'

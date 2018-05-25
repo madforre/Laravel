@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use App\Document;
 use App\Http\Requests;
+use Cache;
+use Image;
+
 
 
 class DocumentsController extends Controller
@@ -29,6 +32,15 @@ class DocumentsController extends Controller
         });
 
         return view('documents.index', compact('index', 'content'));
+    }
+    
+    public function image($file)
+    {
+        $image = $this->document->image($file);
+
+        return response($image->encode('png'), 200, [
+            'Content-Type'  => 'image/png'
+        ]);
     }
 
 //    public function show($file = null)

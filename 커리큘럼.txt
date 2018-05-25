@@ -97,3 +97,9 @@ https://laravel.com 백과사전? 같은 느낌
 
 https://laravelcode.com/ 질문?(작은사이트같음)
 https://templatebench.com 최신정보 확인
+
+----------------------
+
+클래스와 네임 스페이스에 관한 가장 쉽고 가장 깔끔한 설명
+
+https://www.haruair.com/blog/2843#comment-4149
