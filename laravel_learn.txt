@@ -391,11 +391,6 @@ view는 Helper Function이다. return View::make('welcome')과 같이 라라벨�
  엘로퀀트의 전부가 아니란 얘기다. 엘로퀀트 ORM의 꽃은 모델간의 관계 맺기이다.
  
  --------------------------------
- 
-    엘로퀀트는 모든 모델이 updated_at과 created_at 필드가 있다고 가정하고, 
-    새로운 Instance가 생성될 때 현재의 timestamp값을 입력하려한다. 그런데, 수작업으로 만든 테이블들은 앞서 말한 
-     필드들이 존재하지 않는다. 방법은 필드를 추가하는 방법과, timestamp 입력을 모델에서 끄는 방법이 있는데, 실습을 위해서 일단 꺼뒀음.
-    // public $timestamps = false; 사
     
  모델에 변경이 생기면 실행중이던 tinker 를 다시 실행해 주어야 한다. tinker 가 로드될 시점에 라라벨 구동을 위한 모든 환경이 로드되므로, 이후 변경을 반영하기 위함이다. ctrl + C 또는 >>> exit 명령으로 종료할 수 있다.
  
@@ -1094,3 +1089,83 @@ Route::group()은 여러개의 Route에 공통된 Prefix Url, Route Name을 붙�
 App\Http\Controllers\Auth\AuthController, 
 App\Http\Controllers\Auth\PasswordController의 것을 그대로 사용한 것이다.
 
+-------------------------
+
+의존성 주입(Dependency Injection, DI)은 프로그래밍에서 구성요소간의 종속성을 
+소스코드에서 설정하지 않고 외부의 설정파일 등을 통해 컴파일 시점이나 실행 시점에 주입하도록 
+하는 디자인 패턴 중의 하나이다.
+
+간단한 얘기입니다.
+의존성 주입이라는 것은 특정 컴포넌트의 의존 관계를, 생성자에서 주입하거나 메소드 호출 혹은 
+프로퍼티 설정을 하는 방식으로 지정할 수 있게 하는 것입니다.
+
+간단한 예제를 통해서 기본적인 개념을 보여드리겠습니다.
+
+아래 코드를 보면 데이터베이스와 통신하기 위한 어댑터를 필요로 하는 Database라는 클래스가 있습니다. 
+생성자에서 어댑터 인스턴스를 생성하는 방식으로 되어 있어서 
+두 클래스는 서로 강한 의존 관계를 가지고 있습니다. 그래서 Database 클래스를 테스트하기도 어렵습니다.
+
+<?php
+namespace Database;
+
+class Database
+{
+    protected $adapter;
+
+    public function __construct()
+    {
+        $this->adapter = new MySqlAdapter;
+    }
+}
+
+class MysqlAdapter {}
+아래와 같이 리팩터링하여 의존성 주입을 사용하도록 하면 의존 관계를 약화시킬 수 있습니다.
+
+<?php
+namespace Database;
+
+class Database
+{
+    protected $adapter;
+
+    public function __construct(MySqlAdapter $adapter)
+    {
+        $this->adapter = $adapter;
+    }
+}
+
+class MysqlAdapter {}
+
+이제 Database는 내부에서 직접 의존 관계에 있는 클래스 인스턴스를 생성하지 않고, 
+외부에서 전달받게 되었습니다. 어댑터 인스턴스를 인자로 전달받는 메소드를 만들어서 해당 어댑터를 
+사용하도록 설정하는 방식을 적용하거나, $adapter 프로퍼티를 public 으로 만들어서 프로퍼티를 직접 
+설정하게 할 수도 있을 것입니다.
+
+----------------------------
+
+컨트롤러에 논리를 너무 많이 넣으면 코드의 유지 관리 가능성이 낮아질 수 있습니다. 
+나중에 코드로 돌아 가면 확인 전자 메일 논리를 검색해야합니다. 
+일이 잘 돌아가고 있다면 등록 할 때 더 많은 기능을 추가 할 수 있습니다. 
+예를 들어 통계 처리, 등록 로그 기록 또는 다른 전자 메일 보내기 등. 
+컨트롤러에이 기능을 모두 추가하고 싶지는 않을 것입니다.
+
+이러한 문제를 피하기 위해 종종 초보자가 잊어 버리는 개념 인 EventListeners를 활용 
+합니다. 몇 년 후 쉽게 구축 할 수 있으며 나중에 다시 방문 할 수 있으며 사용자가 
+한 곳에서 등록 할 때 발생하는 모든 논리를 찾을 수 있습니다.
+
+--------------------------------
+
+기본 헬퍼 함수
+
+auth() - auth 함수는 authenticator 인스턴스를 반환합니다. 
+        편의를 위하여 Auth 파사드 대신 이용할 수 있습니다:
+
+            $user = auth()->user();
+            
+        필요한 경우, 어떤 guard 인스턴스를 사용할지 지정할 수 있습니다:
+
+            $user = auth('admin')->user();
+            
+route() - 이름있는 라우트 사용할 때 쓰인다.
+
+----------------------------
