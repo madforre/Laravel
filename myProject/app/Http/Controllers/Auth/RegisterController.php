@@ -84,7 +84,7 @@ class RegisterController extends Controller
         try {
             $user = app(User::class)->where('activation_code', $activationCode)->first();
             if (!$user) {
-                return "The code does not exist for any user in our system.";
+                return "인증코드가 존재하지 않거나 만료되었습니다.";
             }
             $user->status          = 1;
             $user->activation_code = null;

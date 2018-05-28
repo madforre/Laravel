@@ -50,12 +50,12 @@ class UserRegisteredSuccessfully extends Notification
         $user = $this->user;
         
         return (new MailMessage)
-            ->from('ItWorks@practice.com')
-            ->subject('Successfully created new account')
+            ->from('Bakecrea@practice.com')
+            ->subject('계정이 생성되었습니다. 이메일 인증 확인을 해주세요!')
             ->greeting(sprintf('Hello %s', $user->name))
-            ->line('You have successfully registered to our system. Please activate your account.')
-            ->action('Click Here', route('activate.user', $user->activation_code))
-            ->line('Thank you for using our application!');
+            ->line('성공적으로 계정생성이 완료되었습니다. 계정을 활성화 해주세요!')
+            ->action('click', route('activate.user', $user->activation_code))
+            ->line('회원가입을 환영합니다.');
     }
 
     /**
