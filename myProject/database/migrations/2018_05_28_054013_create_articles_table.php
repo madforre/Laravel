@@ -23,7 +23,7 @@ class CreateArticlesTable extends Migration
             $table->timestamps();
 
             $table->foreign('author_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('solution_id')->references('di')->on('comments');
+            $table->foreign('solution_id')->references('id')->on('comments');
         });
     }
 

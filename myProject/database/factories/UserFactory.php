@@ -20,4 +20,37 @@ $factory->define(App\User::class, function (Faker $faker) {
         'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
         'remember_token' => str_random(10),
     ];
+
+});
+
+// 모델 팩토리 추가 작성
+    
+$factory->define(App\Article::class, function (Faker $faker) {
+    return [
+        'title'   => $faker->sentence(),
+        'content' => $faker->paragraph(),
+    ];
+});
+    
+$factory->define(App\Comment::class, function (Faker $faker) {
+    return [
+        'title'   => $faker->sentence,
+        'content' => $faker->paragraph,
+    ];
+});
+    
+$factory->define(App\Tag::class, function (Faker $faker) {
+    $name = ucfirst($faker->optional(0.9, 'Laravel')->word);
+                            // 10% chance of NULL
+    return [
+            'name' => $name,
+            'slug' => str_slug($name),
+        ];
+});
+
+// 사용자가 업로드한 파일의 이름(또는 경로)을 담고 있는 모델이다.
+$factory->define(App\Attachment::class, function (Faker $faker) {
+    return [
+        'name' => sprintf("%s.%s", str_random(), $faker->randomElement(['png', 'jpg'])),
+    ];
 });

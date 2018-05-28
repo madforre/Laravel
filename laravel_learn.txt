@@ -1226,10 +1226,86 @@ FOREIGN KEY 옵션
 
 외래키를 사용한 테이블을 삭제할 때는 제약조건에 어긋나지 않게 순서대로 삭제해야 삭제가 됩니다.
 
+------------------------------
 
+함수 studly_case()
+    pascal_case()
+        
+        문자열을 파스칼 표기법에 맞추어 변환하는 함수
+        각 단어의 첫글자는 대문자로, 나머지는 소문자로 변환하고 공백을 없앰
 
+    ex) $samples = array('foo_bar', 'Foo Bar', 'FooBar', 'fooBar', 'Foobar', 'foo bar', 'FOOBAR');
+        foreach( $samples as $sample ) {
+	        echo $sample." → ".studly_case($sample) . PHP_EOL;
+        }
+        # foo_bar → FooBar
+        # foo bar → FooBar
+        # Foo Bar → FooBar
+        # FooBar → FooBar
+        # fooBar → FooBar
+        # Foobar → Foobar
+        # FOOBAR → FOOBAR
 
+라라벨에서 모델 클래스는 테이블 이름을 StudlyCase 형식의 문자로 만들고 
+단수형으로 사용하는 관례가 있습니다.
 
+모델            테이블
+Task        	tasks
+PasswordReset	password_resets
+ArticleCategory	article_categories
 
+------------------------------
 
+필드(field), Attribute, Property 란 용어를 혼용해서 사용하는데 
+모두 같은 의미로 이해하자. HTML 폼이나 DB 테이블에서는 필드라는 이름이 
+좀 더 적절하고, 오브젝트 컨텍스트(객체 참조)에서는 
+Attribute나 Property란 용어가 더 적절할 것이다.
 
+----------------------------
+
+MySQL - SET FOREIGN_KEY_CHECKS - 외래 키 제약 조건 확인 또는 비 제한
+
+    FOREIGN_KEY_CHECKS 옵션은 InnoDB 테이블의 외래 키 제약 조건을 
+    검사할지 여부를 지정합니다.
+
+빠른 예 :
+
+   - 외래 키 제약 조건을 확인하도록 지정합니다 (기본값). 
+    SET FOREIGN_KEY_CHECKS =  1 ;
+ 
+   - 외래 키 제약 조건을 확인하지 않습니다.
+    SET FOREIGN_KEY_CHECKS =  0 ;
+
+----------------------------
+
+Pivot Table
+
+    사용자가 데이터의 상이한(서로 다른) 스키머로 접속할 수 있게 하는 다차원 데이터 구조
+
+피벗테이블은 많은 양의 데이터를 빠른 시간에 다양하게 분석할 수 있는 
+대화형 테이블이라고 할 수 있다.
+
+------------------------
+
+데이터베이스 : 스키마 빌더
+
+$table->timestamps();	Adds created_at and updated_at columns
+
+---------------------------
+
+모델 팩토리
+
+factory() Helper 에서 호출한 make() 메소드는 메모리에 모델 인스턴스만 생성하는 
+반면, 곧 보게 될 create() 메소드는 모델 인스턴스를 생성하고 
+DB에 저장하는 일까지 한다.
+
+-------------------------
+
+마이그레이션에서 batch 뜻?
+
+직역하면 집단,무리,일괄
+
+batch컬럼의 숫자가 같으면 마이그레이션 할 때
+동시에 같이 실행된 마이그레이션이라고 생각하면 된다.
+
+---------------------------
