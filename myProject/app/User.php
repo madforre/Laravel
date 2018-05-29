@@ -36,12 +36,12 @@ class User extends Authenticatable
 
     public function comments()
     {
-        return $this->hasMany(Comment::class, 'author_id');
+        return $this->hasMany('App\Comment', 'author_id');
     }
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class)->withTimestamps;
+        return $this->belongsToMany('App\Role','role_user');
     }
    
 }
