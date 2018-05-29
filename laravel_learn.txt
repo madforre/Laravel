@@ -1421,3 +1421,55 @@ RESTful API 개발 원칙
     서버와 클라이언트를 분리할 수 있게 한다.
 
 테스트 도구로는 curl, Postman 이 있다.
+
+-----------------------------------
+
+HTTP-MiddleWare
+
+HTTP 미들웨어는 어플리케이션으로 들어온 HTTP 요청을 간편하게 
+필터링할 수 있는 방법을 제공합니다. 
+예를 들어, 라라벨은 어플리케이션의 사용자가 인증되었는지 
+검사하는 미들웨어를 내장하고 있습니다. 
+만약 인증되지 않은 사용자라면, 미들웨어는 그 사용자를 
+로그인 화면으로 리다이렉트 시킬 것입니다. 
+반대로, 인증된 사용자라면, 미들웨어는 어플리케이션에서 HTTP 요청이 
+계속해서 더 처리되도록 허용할 것입니다.
+
+라라벨 프레임워크에는 인증(authentication)과 CSRF 보안을 위한 
+미들웨어들이 포함되어 있습니다. 
+이러한 미들웨어들은 모두 app/Http/Middleware 디렉토리 안에 
+위치하고 있습니다.
+
+------------------------------------
+
+컬렉션
+
+Illuminate\Support\Collection 클래스는 
+배열 데이터를 사용하기위한 유연하고 편리한 
+래퍼(wrapper)를 제공합니다. 
+
+each(),
+make() 등등..
+
+make() 메소드는 새로운 컬렉션 인스턴스를 생성합니다.
+
+map() 메소드는 컬렉션 전체를 반복하여 주어진 콜백에 각각의 값을
+전달합니다.
+
+each() 메소드는 컬렉션의 아이템을 반복적으로 처리하여 콜백에 각
+아이템을 전달합니다.
+
+기타 컬렉션 메소드는 공식문서
+https://laravel.kr/docs/5.6/collections 참고
+
+
+-------------------------------------
+
+ACL은 ACL (Access Control List)의 약자입니다. 
+laravel 5.6에서 큰 응용 프로그램을 작성하는 경우 ACL 역할 및 권한이 매우 중요합니다. 
+spatie / laravel-permission 작성자 패키지를 사용하여 
+사용자 역할 및 권한 (ACL)을 구현합니다. 
+
+https://github.com/spatie/laravel-permission
+https://www.youtube.com/playlist?list=PL55RiY5tL51r_qJPESCy5ScfwTo2klnlW
+http://l5.appkr.kr/lessons/37-articles.html
