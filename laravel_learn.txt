@@ -1669,6 +1669,13 @@ $action = Route::currentRouteAction();
 
 -------------------------------
 
+추후 뷰 컴포저에 대해서도 알아보도록 하자.
+
 태그 리스트를 포함한 왼쪽 영역은 여러 뷰에서 사용하므로, 
 뷰 컴포저로 구성하면 더 깔끔하다. 
 이 코스 수준을 넘어서는 내용으로 각자 공부해서 적용해 보자. 
+
+-------------------------------
+
+https://wpkb.org/add-font-awesome-to-laravelde << 폰트 어워썸 설치 방법
+http://l5.appkr.kr/lessons/37-articles.html Article 구현

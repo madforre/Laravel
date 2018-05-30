@@ -113,3 +113,19 @@ https://medium.com/@sadhakbj/laravel-5-5-activate-account-after-registration-usi
 이걸 따라가라...
 
 ------------------------
+
+S3 bucket mount?
+
+http://www.whiteboardcoder.com/2017/12/how-to-mount-s3-bucket-as-hard-drive.html
+
+나중에 보도록 하자.
+
+----------------------------
+
+Closure
+
+    클로저의 쓰임새
+
+    http://php.net/manual/kr/functions.anonymous.php 참고
+ 
+    추후 다시 공부하자.
