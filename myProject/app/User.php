@@ -42,7 +42,8 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany('App\Role','role_user');
+        // many to many relationships
+        return $this->belongsToMany('App\Role','role_user','role_id','user_id');
     }
 
     // 롤 패키지 추가
