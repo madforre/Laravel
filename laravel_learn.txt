@@ -1585,3 +1585,90 @@ Closure
 Closure 범위 내에서 변수를 사용하려면 use키워드를 사용하여 
 변수를 Closure에 전달해야합니다.
 
+---------------------------
+
+ 쿠키는 프론트엔드, 즉 브라우저에 저장된다. 
+ 가령, 폰트 사이즈에 대한 사용자 설정이라면 서버를 거칠 필요가 없이 
+ 자바스크립트에서 미리 저장된 쿠키 또는 localStorage 를 읽어서 
+ 동적으로 CSS 속성을 변경하면 된다. 
+
+Controller.php 를 상속 받고 있는 컨트롤러 들이 생성자를 사용하고 있다면,
+반드시 parent::__construct() 를 호출해 주어야 한다.
+(컨트롤러에 생성자가 있을 경우)
+
+------------------------------
+
+with 메소드를 사용하여 Eager Loding 으로 comments, author, tags
+         관계를 포함한다.
+         $articles = Article::with('comments', 'author', 'tags')->latest()->paginate(10);
+         view에 변수를 전달합니다. 
+         compact 는 변수와 그 값을 가지는 배열을 만들어 줍니다.
+         compact('articles') 대신 ['articles'=>$articles] 구문으로
+         직접 배열을 만들어 주어도 같은 결과를 얻을 수 있습니다.
+         또는 view의 with 메소드를 사용하여 배열을 생성할 수도 있습니다.
+         return view('articles.index', compact('articles'));
+
+         view의 with 메소드 사용하여 배열 생성하는 방법( 주로 선호됨 )
+         + 여러개의 변수를 뷰에 전달하기 (메소드 체이닝 사용하여 with 여러번 호출)
+         ex) return view('task.view')->with('users', $users)
+                                     ->with('account', $account)
+                                     ->with('tasks', $tasks);
+
+뷰에서 하위 데이터 넘기기
+
+하위 뷰에 데이터를 넘겨 줄 때는, 
+@include('articles.partial.article', ['article' => $article]) 
+이런 식으로 넘긴다는 것을 익혀 두자.
+
+--------------------------------
+<form role="form"> 에서 role 이란
+
+html5에 새롭게 추가된 태그로서, 해당 태그에 대한 정의를 해줌으로써,
+컴퓨터의 리더기(시각장애인)를 이용하여 웹페이지를 읽을 때,
+해당 부분이 form이라는 것을 알려주는 것이다.
+
+role 속성들로는 alert, article, banner, img, heading, contentinfo,
+....등이 있다.
+
+다음에 사이트 참고
+
+https://m.blog.naver.com/PostView.nhn?blogId=ksh81850&logNo=220420841804&proxyReferer=https%3A%2F%2Fwww.google.com%2F
+
+---------------------------------
+
+페이지 링크에 추가하기
+
+appends 메소드를 사용하면 페이지 링크에 쿼리 스트링을 추가할 수 있습니다. 
+예를 들어, 각각의 페이지 링크에 &sort=votes를 추가하려면, 
+다음과 같이 appends 를 호출해야 합니다.
+
+    {{ $users->appends(['sort' => 'votes'])->links() }}
+
+예시 ex)
+        {{ $articles->appends(Request::except('page'))->render() }} 는 
+        나중에 Url 뒤에 여러 개의 쿼리스트링이 붙을 것을 대비해, 
+        미리 appends() 메소드를 이용해서 page 쿼리를 빼고 
+        나머지들은 모두 붙이도록 했다. 
+        가령, GET /articles?solved=0 요청의 페이징 링크는 
+        /articles?solved=0&page=1, /articles?solved=0&page=2 와 같은 식으로 
+        생성된다.
+
+--------------------------------
+
+현재 라우트에 엑세스하기
+
+Route 파사드의 current, currentRouteName 그리고 currentRouteAction 메소드를 
+사용하여, 유입된 request-요청을 처리하는 라우트에 대한 정보에 
+엑세스 할 수 있습니다:
+
+$route = Route::current();
+
+$name = Route::currentRouteName();
+
+$action = Route::currentRouteAction();
+
+-------------------------------
+
+태그 리스트를 포함한 왼쪽 영역은 여러 뷰에서 사용하므로, 
+뷰 컴포저로 구성하면 더 깔끔하다. 
+이 코스 수준을 넘어서는 내용으로 각자 공부해서 적용해 보자. 
