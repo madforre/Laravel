@@ -1,11 +1,13 @@
 <!-- resources/views/articles/index.blade.php -->
 
-@extends('layouts.master')
+@extends('layouts.app')
 
 @section('content')
-  <div class="page-header">
-    ...
-  </div>
+<div class="page-header">
+  <a class="btn-lg btn-primary" href="{{ route('articles.create') }}">
+    {!! icon('forum') !!} {{ trans('forum.create') }}
+  </a>
+</div>
 
   <div class="row container__forum">
     <div class="col-md-3 sidebar__forum">
@@ -17,6 +19,11 @@
 
     <div class="col-md-9">
       <article>
+        @if (session('status'))
+          <div class="alert alert-success">
+                 {{ session('status') }}
+           </div>
+        @endif
         @forelse($articles as $article)
           @include('articles.partial.article', ['article' => $article])
         @empty
@@ -28,6 +35,5 @@
         </div>
       </article>
     </div>
-
   </div>
 @stop

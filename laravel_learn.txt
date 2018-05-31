@@ -1679,3 +1679,15 @@ $action = Route::currentRouteAction();
 
 https://wpkb.org/add-font-awesome-to-laravelde << 폰트 어워썸 설치 방법
 http://l5.appkr.kr/lessons/37-articles.html Article 구현
+
+----------------------------
+
+old() Helper
+
+세션에 저장된 값을 사용 가능
+
+    ex) old('title', $article->title)
+
+        세션에 $title 값이 있으면 쓰고, 
+        
+        없으면 $article->title로 폴백하라는 의미이다. 

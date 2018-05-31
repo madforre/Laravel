@@ -1,0 +1,26 @@
+<!-- resources/articles/partial/form.blade.php -->
+
+<div class="form-group">
+  <label for="title">{{ trans('forum.title') }}</label>
+  <input type="text" name="title" id="title" class="form-control" value="{{ old('title', $article->title) }}"/>
+  {!! $errors->first('title', '<span class="form-error">:message</span>') !!}
+</div>
+
+<div class="form-group">
+  <label for="content">{{ trans('forum.content') }}</label>
+  <textarea name="content" class="form-control" rows="10">{{ old('content', $article->content) }}</textarea>
+  {!! $errors->first('content', '<span class="form-error">:message</span>') !!}
+</div>
+
+<div class="form-group">
+  <!-- 추후 태그 선택하는 UI 추가할 것이다. 여유가 된다면 미리보기까지 골뱅이인클루드('articles.partial.tagselector') -->
+</div>
+
+<div class="form-group">
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="notification" checked="{{ $article->notification ?: 'checked' }}">
+      {{ trans('forum.notification') }}
+    </label>
+  </div>
+</div>

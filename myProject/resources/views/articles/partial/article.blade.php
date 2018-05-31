@@ -16,7 +16,7 @@
 
         @if ($article->solution_id)
           <span class="badge pull-right">
-            {!! icon('comments') !!} {{ trans('forum.solved') }}
+            {!! icon('check') !!} {{ trans('forum.solved') }}
           </span>
         @endif
       </a>

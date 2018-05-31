@@ -21,7 +21,7 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('123456'),
             'status' => 1            
         ]);
-        factory(App\User::class, 9)->create();
+        factory(App\User::class, 31)->create();
         $this->command->info('users table seeded');
     }
 }

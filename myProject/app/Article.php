@@ -10,13 +10,11 @@ class Article extends Model
         'author_id',
         'title',
         'content',
-        'notification'
     ];
 
     protected $hidden = [
         'author_id',
         'solution_id',
-        'notification'
     ];
 
     /* Relationships */
@@ -44,5 +42,10 @@ class Article extends Model
     public function attachments()
     {
         return $this->hasMany(Attachment::class, 'article_id');
+    }
+
+    public function isAuthor()
+    {   
+        return $this->author_id == auth()->user()->id;
     }
 }

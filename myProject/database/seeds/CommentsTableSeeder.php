@@ -25,7 +25,8 @@ class CommentsTableSeeder extends Seeder
         $articles->each(function($article) use($faker, $users) {
             $article->comments()->save(
                 factory(App\Comment::class)->make([
-                    'author_id' => $faker->randomElement($users->pluck('id')->toArray())
+                    'author_id' => $faker->randomElement($users->pluck('id')->toArray()),
+                    'parent_id' => $faker->randomElement($users->pluck('id')->toArray())
                 ]) 
             );
         });

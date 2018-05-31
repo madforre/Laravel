@@ -12,7 +12,8 @@ if (! function_exists('attachment_path')) {
     }
 }
 
-// app/helpers.php
+// Gravatar Helper
+// 's' 쿼리는 가져올 아바타 이미지의 사이즈를 의미한다.
 
 function gravatar_profile_url($email)
 {
@@ -34,4 +35,3 @@ if (! function_exists('icon')) {
         return sprintf('<i class="%s %s" %s></i>', $icon, $addition, $inline);
     }
 }
-

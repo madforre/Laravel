@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Article;
+use App\Http\Requests\ArticlesRequest;
+
 
 use Illuminate\Http\Request;
 
@@ -29,6 +31,7 @@ class ArticlesController extends Controller
     {   // with 메소드를 사용하여 Eager Loding 으로 comments, author, tags
         // 관계를 포함한다.
         $articles = Article::with('comments', 'author', 'tags')->latest()->paginate(10);
+
         // view에 변수를 전달합니다. 
         // compact 는 변수와 그 값을 가지는 배열을 만들어 줍니다.
         // compact('articles') 대신 ['articles'=>$articles] 구문으로
@@ -50,7 +53,9 @@ class ArticlesController extends Controller
      */
     public function create()
     {
-        //
+        $article = new Article;
+
+        return view('articles.create', compact('article'));
     }
 
     /**
@@ -61,7 +66,10 @@ class ArticlesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $article = Article::create($request->all());
+        flash()->success(trans('forum.created'));
+
+        return redirect(route('articles.index'));
     }
 
     /**
@@ -71,7 +79,8 @@ class ArticlesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
+    { // 목록에서 Article 엔트리의 제목을 누르면 
+      // 'GET /articles/{id}' 로 넘어가도록 목록 보기 뷰에서 링크를 걸었다
         $article = Article::with('comments', 'author', 'tags')->findOrFail($id);
 
         return view('articles.show', compact('article'));
@@ -85,7 +94,9 @@ class ArticlesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $article = Article::findOrFail($id);
+
+        return view('articles.edit', compact('article'));
     }
 
     /**
@@ -97,7 +108,11 @@ class ArticlesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $article = Article::findOrFail($id);
+        $article->update($request->except('_token', '_method'));
+        flash()->success(trans('forum.updated'));
+
+        return redirect(route('articles.index'));
     }
 
     /**
@@ -108,6 +123,9 @@ class ArticlesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Article::findOrFail($id)->delete();
+        flash()->success(trans('forum.deleted'));
+
+        return redirect(route('articles.index'));
     }
 }
