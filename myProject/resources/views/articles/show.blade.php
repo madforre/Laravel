@@ -23,8 +23,9 @@
           {!! $article->content !!}
           <!-- 중괄호!! markdown($article->content) !!중괄호 -->
         </p>
+
         @if (auth()->check())
-          @if ($article->isAuthor())
+          @if ($user->isAdmin() or $article->isAuthor())
           <div class="text-center">
             <form action="{{ route('articles.destroy', $article->id) }}" method="post">
               {!! csrf_field() !!}
@@ -44,6 +45,7 @@
       
       <article>
         Comment here
+        {{ isAdmin() }}
       </article>
     </div>
   </div>

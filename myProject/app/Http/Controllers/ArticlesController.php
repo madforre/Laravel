@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Article;
+use App\User;
 use App\Http\Requests\ArticlesRequest;
-
+use App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 
@@ -81,9 +82,10 @@ class ArticlesController extends Controller
     public function show($id)
     { // 목록에서 Article 엔트리의 제목을 누르면 
       // 'GET /articles/{id}' 로 넘어가도록 목록 보기 뷰에서 링크를 걸었다
-        $article = Article::with('comments', 'author', 'tags')->findOrFail($id);
+        $article = Article::with('comments', 'author', 'tags')->findOrFail($id); // eager 로딩사용
+        $user = new User();
 
-        return view('articles.show', compact('article'));
+        return view('articles.show', compact('article','user')); // 인스턴스를 만들어서 뷰에 전달한것이다.
     }
 
     /**

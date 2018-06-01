@@ -15,12 +15,19 @@ class CreateRoleUserTable extends Migration
     {
         Schema::create('role_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('role_id')->unsigned(); // 역할아이디(admin,visitor,author 등등)
-            $table->integer('user_id')->unsigned(); // 유저아이디
-            $table->timestamps();
 
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            // users 테이블에 대한 참조키
+            $table->integer('user_id')->unsigned(); // 유저아이디
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            
+            // roles 테이블에 대한 참조키
+            $table->integer('role_id')->unsigned(); // 역할아이디(admin,visitor,author 등등)
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+
+            // user_id 컬럼은 유일해야 한다.
+            $table->unique(['user_id']);
+
+            $table->timestamps();
         });
     }
 

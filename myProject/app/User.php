@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Collection; //추가
+use Illuminate\Database\Query\Builder; // 추가
 
 class User extends Authenticatable
 {
@@ -43,46 +44,14 @@ class User extends Authenticatable
     public function roles()
     {
         // many to many relationships
-        return $this->belongsToMany('App\Role','user_id','role_id')->withTimestamps();
+        return $this->belongsToMany('App\Role')->withTimestamps();
     }
 
     public function isAdmin()
-    {   
-        return $this->roles()->whereSlug('admin')->exists();
-    }
-
-
-    // // 롤 패키지 추가
-
-    //     /**
-    //     * @param string|array $roles
-    //     */
-    // public function authorizeRoles($roles)
-    // {
-    //     if (is_array($roles)) {
-    //         return $this->hasAnyRole($roles) || 
-    //          abort(401, 'This action is unauthorized.');
-    // }
-    // return $this->hasRole($roles) || 
-    //      abort(401, 'This action is unauthorized.');
-    // }
-    // /**
-    // * Check multiple roles
-    // * @param array $roles
-    // */
-    // public function hasAnyRole($roles)
-    // {
-    //   return null !== $this->roles()->whereIn('name', $roles)->first();
-    // }
-    // /**
-    // * Check one role
-    // * @param string $role
-    // */
-    // public function hasRole($role)
-    // {
-    // return null !== $this->roles()->where('name', $role)->first();
-    // }
-   
+    {    
+        // 접속한 유저의 역할 이름을 뽑아서 컬렉션을 배열로 풀어준 뒤 배열의 첫번째
+        // 인덱스의 값이 admin과 같다면 true를 리턴한다.
+        return $this->roles->pluck('name')->all()[0]=='admin';
+        // where() all() get() App\user::roles pluck() 등등등.. 사용해서 해결하자.
+    }  
 }
-
-
