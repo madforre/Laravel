@@ -45,7 +45,6 @@
       
       <article>
         Comment here
-        {{ isAdmin() }}
       </article>
     </div>
   </div>

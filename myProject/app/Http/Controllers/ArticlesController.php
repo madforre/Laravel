@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 use App\Article;
 use App\User;
-use App\Tag;
 use App\Http\Requests\ArticlesRequest;
 use App\Http\Controllers\Auth;
 
@@ -30,15 +29,10 @@ class ArticlesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id = null)
-    {   $query = $id
-        ? Tag::find($id)->articles()
-        : new Article;
-        $articles = $query->with('comments', 'author', 'tags')->latest()->paginate(10);
-        
-        // with 메소드를 사용하여 Eager Loding 으로 comments, author, tags
+    public function index()
+    {   // with 메소드를 사용하여 Eager Loding 으로 comments, author, tags
         // 관계를 포함한다.
-        // $articles = Article::with('comments', 'author', 'tags')->latest()->paginate(10);
+        $articles = Article::with('comments', 'author', 'tags')->latest()->paginate(10);
 
         // view에 변수를 전달합니다. 
         // compact 는 변수와 그 값을 가지는 배열을 만들어 줍니다.
@@ -100,17 +94,8 @@ class ArticlesController extends Controller
       // 'GET /articles/{id}' 로 넘어가도록 목록 보기 뷰에서 링크를 걸었다
         $article = Article::with('comments', 'author', 'tags')->findOrFail($id); // eager 로딩사용
         $user = new \App\User;
-        $commentsCollection = $article->comments()->with('replies', 'author')->whereNull('parent_id')->latest()->get();
 
-        return view('articles.show', [
-            'article'         => $article,
-            'comments'        => $commentsCollection,
-            'commentableType' => Article::class,
-            'commentableId'   => $article->id,
-            'user'            => $user
-        ]); // 댓글 구조 구현
-
-        // return view('articles.show', compact('article','user')); // 인스턴스를 만들어서 뷰에 전달한것이다.
+        return view('articles.show', compact('article','user')); // 인스턴스를 만들어서 뷰에 전달한것이다.
     }
 
     /**
@@ -160,20 +145,9 @@ class ArticlesController extends Controller
      */
     public function destroy($id)
     {
-        $article = Article::with('attachments', 'comments')->findOrFail($id);
-
-        foreach($article->attachments as $attachment) {
-            \File::delete(attachment_path($attachment->name));
-        }
-    
-        $article->attachments()->delete();
-        $article->comments->each(function($comment) { // foreach 로 써도 된다.
-            app(\App\Http\Controllers\CommentsController::class)->recursiveDestroy($comment);
-        });
-        $article->delete();
-    
+        Article::findOrFail($id)->delete();
         flash()->success(trans('forum.deleted'));
-    
+
         return redirect(route('articles.index'));
     }
 }
