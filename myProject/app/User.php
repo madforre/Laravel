@@ -48,10 +48,12 @@ class User extends Authenticatable
     }
 
     public function isAdmin()
-    {    
-        // 접속한 유저의 역할 이름을 뽑아서 컬렉션을 배열로 풀어준 뒤 배열의 첫번째
-        // 인덱스의 값이 admin과 같다면 true를 리턴한다.
-        return $this->roles->pluck('name')->all()[0]=='admin';
+    {   
         // where() all() get() App\user::roles pluck() 등등등.. 사용해서 해결하자.
+        
+        // 접속한 유저의 역할 이름을 뽑아서 컬렉션을 배열로 풀어준 뒤 배열의 첫번째
+        // 인덱스의 값이 admin과 같다면 true를 리턴한다.        
+        return auth()->user()->roles()->pluck('name')->all()[0]=='admin';
+        
     }  
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Article;
 use App\User;
+use App\Tag;
 use App\Http\Requests\ArticlesRequest;
 use App\Http\Controllers\Auth;
 
@@ -19,6 +20,7 @@ class ArticlesController extends Controller
     {
         $this->middleware('auth', ['except' => ['index', 'show']]);
         view()->share('allTags', \App\Tag::with('articles')->get());
+        $this->middleware('accessible', ['except' => ['index', 'show', 'create']]);
         // parent::__construct(); 컨트롤러.php에 생성자가 있다면 써준다.
         // 생성자 중복을 방지함. 
     }
@@ -28,10 +30,15 @@ class ArticlesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {   // with 메소드를 사용하여 Eager Loding 으로 comments, author, tags
+    public function index($id = null)
+    {   $query = $id
+        ? Tag::find($id)->articles()
+        : new Article;
+        $articles = $query->with('comments', 'author', 'tags')->latest()->paginate(10);
+        
+        // with 메소드를 사용하여 Eager Loding 으로 comments, author, tags
         // 관계를 포함한다.
-        $articles = Article::with('comments', 'author', 'tags')->latest()->paginate(10);
+        // $articles = Article::with('comments', 'author', 'tags')->latest()->paginate(10);
 
         // view에 변수를 전달합니다. 
         // compact 는 변수와 그 값을 가지는 배열을 만들어 줍니다.
@@ -67,10 +74,19 @@ class ArticlesController extends Controller
      */
     public function store(Request $request)
     {
-        $article = Article::create($request->all());
+        $payload = array_merge($request->except('_token'), [
+            'notification' => $request->has('notification')
+        ]);
+    
+        $article = $request->user()->articles()->create($payload);
+        $article->tags()->sync($request->input('tags'));
         flash()->success(trans('forum.created'));
-
+    
         return redirect(route('articles.index'));
+        // $article = Article::create($request->all());
+        // flash()->success(trans('forum.created'));
+
+        // return redirect(route('articles.index'));
     }
 
     /**
@@ -83,9 +99,18 @@ class ArticlesController extends Controller
     { // 목록에서 Article 엔트리의 제목을 누르면 
       // 'GET /articles/{id}' 로 넘어가도록 목록 보기 뷰에서 링크를 걸었다
         $article = Article::with('comments', 'author', 'tags')->findOrFail($id); // eager 로딩사용
-        $user = new User();
+        $user = new \App\User;
+        $commentsCollection = $article->comments()->with('replies', 'author')->whereNull('parent_id')->latest()->get();
 
-        return view('articles.show', compact('article','user')); // 인스턴스를 만들어서 뷰에 전달한것이다.
+        return view('articles.show', [
+            'article'         => $article,
+            'comments'        => $commentsCollection,
+            'commentableType' => Article::class,
+            'commentableId'   => $article->id,
+            'user'            => $user
+        ]); // 댓글 구조 구현
+
+        // return view('articles.show', compact('article','user')); // 인스턴스를 만들어서 뷰에 전달한것이다.
     }
 
     /**
@@ -110,10 +135,20 @@ class ArticlesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $article = Article::findOrFail($id);
-        $article->update($request->except('_token', '_method'));
-        flash()->success(trans('forum.updated'));
+        // $article = Article::findOrFail($id);
+        // $article->update($request->except('_token', '_method'));
+        // flash()->success(trans('forum.updated'));
 
+        // return redirect(route('articles.index'));
+        $payload = array_merge($request->except('_token'), [
+            'notification' => $request->has('notification')
+        ]);
+    
+        $article = Article::findOrFail($id);
+        $article->update($payload);
+        $article->tags()->sync($request->input('tags'));
+        flash()->success(trans('forum.updated'));
+    
         return redirect(route('articles.index'));
     }
 
@@ -125,9 +160,20 @@ class ArticlesController extends Controller
      */
     public function destroy($id)
     {
-        Article::findOrFail($id)->delete();
-        flash()->success(trans('forum.deleted'));
+        $article = Article::with('attachments', 'comments')->findOrFail($id);
 
+        foreach($article->attachments as $attachment) {
+            \File::delete(attachment_path($attachment->name));
+        }
+    
+        $article->attachments()->delete();
+        $article->comments->each(function($comment) { // foreach 로 써도 된다.
+            app(\App\Http\Controllers\CommentsController::class)->recursiveDestroy($comment);
+        });
+        $article->delete();
+    
+        flash()->success(trans('forum.deleted'));
+    
         return redirect(route('articles.index'));
     }
 }
