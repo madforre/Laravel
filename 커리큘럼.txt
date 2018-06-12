@@ -26,7 +26,9 @@ Curriculum
 
 	3. Vue.js (하루)
 
-	4. Laravel
+	4. git hub 명령어로 사용하기 (1일)
+
+	5. Laravel
 
 
 
