@@ -1,66 +1,44 @@
-﻿1주차	PHP 웹프로그래밍 입문
-- 웹 사이트가 작동하는 원리
-- 로컬 개발 환경 확인
-- 터미널 및 Git 사용법
-- 속성 PHP & 객체지향 살펴보기
-- 라라벨(Laravel) 설치
-- 컴포저 기본 사용법
-- 헤로쿠 배포 환경 구축 (또는 Envoy)
+﻿
 
-2주차	라라벨 입문(Laravel)
-- 라라벨 전역 환경 설정 및 라라벨 작동 원리
-- 라우팅
-- 뷰와 데이터 바인딩
-- 블레이드
-- 데이터베이스와 모델
+한계 또는 슬럼프에 마주친다?? 공부가 힘들어진다?? 
+열정이 부족하다??
 
-3주차	라라벨(Laravel) 입문 [2]
-- 데이터베이스 마이그레이션
-- 컨트롤러와 REST
-- 사용자 인증
-- 엘로퀀트 ORM
-- 콜렉션과 도우미 함수
-- 데이터베이스 시딩
-
-4주차	라라벨(Laravel) 입문 [3]
-- 입력값 유효성 검사
-- 이벤트 시스템
-- 예외 처리, 에러 리포팅, 디버깅
-- 이메일 보내기 (작업 큐 연동)
-
-5주차	쇼핑몰 개발 [1]
-- 개발 계획 수립
-- 데이터베이스 모델링(ERD)
-- 마이그레이션, 모델 팩토리, 데이터베이스 시더 개발
-- 도메인 모델 개발
-
-6주차	쇼핑몰 개발 [2]
-- User(Seller & Buyer & Member) Feature 개발
-- Product 및 Category Feature 개발
-* 각 Feature는 라우팅, 컨트롤러, 뷰, 각 Feature 별 부가 기능 개발을 포함합니다. (예: 이메일로 사용자 비밀번호 초기화하기 등)
-
-7주차	쇼핑몰 개발 [3]
-- Cart 및 Order Feature 개발
-- Review, Rating, Point, AddressBook, Notification, WishList 등 편의 기능 개발
-
-8주차	쇼핑몰 개발 [4]
-- API 개발
-API는 현대적인 서비스 개발에 가장 중요한 부분입니다. 서버와 클라이언트가 API를 통해 통신할 수 있게 함으로써, 서비스가 웹 브라우저라는 좁은 틀을 벗어나 PC 및 모바일등 다양한 채널로 확장할 수 있게 하는 교두보입니다.
-- 백 오피스 개발
+-> 배움 및 정리가 부족한 것. 복습과 추가적인 학습을 통해서 극복한다.
 
 
 
-패스트 캠퍼스의 커리큘럼이다.
+퀴타 Qiita.com 에서 Laravel 관련 자료 찾아보기 -> so so
 
-아래는 나만의 커리큘럼
+프로그래머스 자바스크립트 This 정복 : https://programmers.co.kr/learn/courses/206 1시간 7분 24초 강의
 
-뷰와 데이터 바인딩
-엘로퀀트 ORM
-DB 마이그레이션
+모던 자바스크립트 ES6 강의에 대한 이해 : https://www.inflearn.com/course/es6-%EA%B0%95%EC%A2%8C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8/ 5시간 7분 강의
 
-입력값 유효성 검사
-예외처리, 에러 리포팅, 디버깅
-블레이드 복습
+Vue.js 개발 : https://laracasts.com/series/learn-vue-2-step-by-step maybe 5시간 40분 학습.
+
+
+
+Curriculum
+
+
+	1. javascript, PHP, Laravel 필기 복습 (1일)
+
+	2. 자바스크립트 this + 모던 자바스크립트 ES6 (하루)
+
+	3. Vue.js (하루)
+
+	4. Laravel
+
+
+
+브리치 (7월 4일 마감)
+
+http://www.saramin.co.kr/zf_user/jobs/relay/view?view_type=search&rec_idx=34007508&isMypage=no&gz=1&recommend_ids=eJxNzsENxTAIA9BpeocYjDn%2FQbr%2FFo1%2BlaTHJyMbhCHFvrN11Q%2BoHhZ2J%2F2lp%2FlJe8DFnRIais0kE7kYZsaqw2CrVtWkIj4cKtgZEsjZ3HjfYFvX4vyZEvax2qBPOtL9v%2FsA9DwwOA%3D%3D&t_ref=search&t_ref_content=generic&searchType=search&searchword=%EB%B8%8C%EB%A6%AC%EC%B9%98&paid_fl=n#seq=0
+
+웹툰가이드 (7월 14일 마감) 
+
+http://www.saramin.co.kr/zf_user/jobs/relay/view?view_type=search&rec_idx=33874201&isMypage=no&gz=1&recommend_ids=eJxNzsENxEAIA8Bq7g8YjHmnkPTfxUWJspvnyNgCmHGIZ41%2BfSANJc5LjDkqzqI%2FjKZ6s5iem8rgh9Wab%2BqiLyrF65gWTwo17WWaU8B6Q2hd6ZrKadPuhpObqgi7l%2F8DAzAp&t_ref=search&t_ref_content=generic&searchType=search&searchword=%EB%9D%BC%EB%9D%BC%EB%B2%A8&paid_fl=n#seq=0
+
+목표는 웹 Full-stack 프로그래머 수준까지 내 실력을 올리는 것이다. 메인언어는 PHP
 
 ------------------------------
 
