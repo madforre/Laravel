@@ -79,7 +79,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    BakeCrea
+                    Madforre
                 </div>
 
                 <div class="links">

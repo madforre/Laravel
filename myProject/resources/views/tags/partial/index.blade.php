@@ -1,7 +1,7 @@
 <!-- resources/views/tags/partial/index.blade.php -->
 
 <p class="lead">
-  {!! icon('tags') !!} Tags
+  {!! icon('tags') !!} Tag
 </p>
 
 <ul class="list-unstyled">

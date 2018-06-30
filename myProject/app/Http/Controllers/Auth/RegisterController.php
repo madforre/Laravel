@@ -60,6 +60,7 @@ class RegisterController extends Controller
         try {
             $validatedData['password'] = bcrypt(array_get($validatedData, 'password'));
             $validatedData['activation_code'] = str_random(30).time();
+
             $user = app(User::class)->create($validatedData);
 
         } catch (\Exception $exception) {
@@ -89,6 +90,13 @@ class RegisterController extends Controller
             $user->status          = 1;
             $user->activation_code = null;
             $user->save();
+
+            
+            $search_id = $user->id;
+            // role_user 테이블에도 데이터 주입
+            $role_user = app(User::class)->find($search_id)->roles()->attach($search_id);
+            $role_user->save();
+
             auth()->login($user);
         } catch (\Exception $exception) {
             logger()->error($exception);

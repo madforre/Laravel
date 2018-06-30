@@ -10,8 +10,8 @@ return [
     'forum'     => 'fab fa-forumbee',
     'connected' => 'far fa-user',
     'join'      => 'fas fa-chalkboard-teacher',
-    'reset'     => '',
-    'plane'     => '',
-    'delete'    => '',
-    'pencil'    => ''
+    'reset'     => 'fas fa-window-restore',
+    'plane'     => 'fas fa-plane',
+    'delete'    => 'fas fa-trash',
+    'pencil'    => 'fas fa-pen'
 ];

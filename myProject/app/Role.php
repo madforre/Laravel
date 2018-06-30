@@ -8,6 +8,6 @@ class Role extends Model
 {
     public function users() // because many users
     {
-        return $this->belongsToMany(User::class); // set up the relation
+        return $this->belongsToMany(User::class, 'role_user','role_id', 'user_id')->withTimeStamps(); // set up the relation
     }
 }

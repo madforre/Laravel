@@ -1,4 +1,0 @@
-Auth::user()->role->name
-(Auth::user()->roles as $roles) 
-        {{ $roles->name }}
-찾아보기

@@ -13,6 +13,13 @@
 </div>
 
 <div class="form-group">
+  <label for="tags">{{ trans('forum.tags') }}</label>
+  <select class="form" multiple="multiple" name="tags[]" id="tags">
+    @foreach($allTags as $tag)
+      <option value="{{ $tag->id }}" {{ in_array($tag->id, $article->tags->pluck('id')->toArray()) ? 'selected="selected"' : ''  }}> {{ $tag->name}} </option>
+    @endforeach
+  </select>
+  {!! $errors->first('tags', '<span class="form-error">:message</span>') !!}
   <!-- 추후 태그 선택하는 UI 추가할 것이다. 여유가 된다면 미리보기까지 골뱅이인클루드('articles.partial.tagselector') -->
 </div>
 

@@ -21,13 +21,15 @@
     <!-- Styles -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/reset.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
+        <!-- <nav class="navbar navbar-expand-md navbar-info navbar-laravel"> -->
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-laravel">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {!! icon('forum') !!} {{ config('app.name', 'BakeCrea') }}
+                    {!! icon('forum') !!} {{ config('APP.NAME', 'Big News') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -43,6 +45,7 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         @guest
+                            <li><a class="nav-link" href="{{ route('articles.index') }}">{!! icon('plane')!!} {{ __('자유게시판') }}<a></li>
                             <li><a class="nav-link" href="{{ route('login') }}">{!! icon('login')!!} {{ __('로그인') }}</a></li>
                             <li><a class="nav-link" href="{{ route('register') }}">{!! icon('join')!!} {{ __('회원가입') }}</a></li>
                         @else
@@ -65,6 +68,7 @@
                             </li>
                         @endguest
                     </ul>
+                    <div class="gnv"></div>
                 </div>
             </div>
         </nav>
